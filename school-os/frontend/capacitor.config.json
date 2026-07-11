@@ -1,0 +1,28 @@
+{
+  "appId": "com.snps.erp",
+  "appName": "SN School OS",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "allowNavigation": [
+      "snpublicschool.edu.in",
+      "schoolos.app"
+    ]
+  },
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    },
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "backgroundColor": "#ffffffff",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": true,
+      "spinnerColor": "#6366f1",
+      "splashFullScreen": true,
+      "splashImmersive": true
+    }
+  }
+}

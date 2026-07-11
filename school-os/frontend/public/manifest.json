@@ -1,0 +1,21 @@
+{
+  "short_name": "School OS",
+  "name": "St. S.N. Public School ERP",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1C2340",
+  "background_color": "#ffffff",
+  "orientation": "portrait"
+}

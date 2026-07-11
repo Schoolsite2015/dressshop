@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash(ls backend/node_modules)",
+      "Bash(ls frontend/node_modules)",
+      "Bash(timeout 30 node -e ' *)",
+      "Bash(node src/db/run-migration.js 002_teacher_assignments.sql)",
+      "Bash(grep -v \"SECURITY WARNING\\\\|next major\\\\|To prepare\\\\|explicitly use\\\\|libpq compatibility\\\\|See https\\\\|trace-warnings\\\\|^$\")",
+      "Bash(node --check src/controllers/admin.controller.js)",
+      "Bash(node --check src/controllers/transport.controller.js)",
+      "Bash(node --check src/routes/admin.routes.js)",
+      "Bash(node --check src/routes/transport.routes.js)",
+      "Bash(npm run *)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\).on\\('end',\\(\\)=>{JSON.parse\\(d\\).staff.forEach\\(s=>console.log\\('  '+s.name+' \\('+s.role+'\\) ['+s.employee_id+'] assignments:',JSON.stringify\\(s.assignments\\)\\)\\)}\\)\")",
+      "Bash(xargs ls -lt)"
+    ]
+  }
+}

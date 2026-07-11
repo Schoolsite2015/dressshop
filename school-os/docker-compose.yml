@@ -1,0 +1,18 @@
+# Spins up just PostgreSQL locally so you don't need to install it.
+# Run: docker compose up -d
+version: "3.8"
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: school_os_user
+      POSTGRES_PASSWORD: change_me
+      POSTGRES_DB: school_os
+    ports:
+      - "5432:5432"
+    volumes:
+      - school_os_pgdata:/var/lib/postgresql/data
+
+volumes:
+  school_os_pgdata:
