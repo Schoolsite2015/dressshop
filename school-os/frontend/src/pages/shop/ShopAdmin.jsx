@@ -128,7 +128,7 @@ export default function ShopAdmin() {
               <div key={s.id} className="flex flex-col sm:flex-row sm:items-center justify-between border border-black/5 rounded-lg p-4 hover:shadow-sm transition-shadow">
                 <div className="flex items-center gap-4 min-w-0">
                   {s.logo_path ? (
-                    <img src={s.logo_path.startsWith('/logos') ? s.logo_path.replace('/logos', '/shop-logos') : s.logo_path} alt={s.name} className="w-12 h-12 rounded-full object-cover border bg-white" />
+                    <img src={s.logo_path} alt={s.name} className="w-12 h-12 rounded-full object-cover border bg-white" />
                   ) : (
                     <div className="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center text-black/40">
                       <Building2 size={24} />

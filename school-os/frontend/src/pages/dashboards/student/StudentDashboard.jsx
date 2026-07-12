@@ -132,7 +132,7 @@ export default function StudentDashboard() {
             <div className="text-right space-y-2">
               <div>
                 <p className="text-xs text-indigo-400">Fee Balance</p>
-                <p className="font-display text-lg font-semibold text-ink">{fees ? `₹${fees.balance.toLocaleString("en-IN")}` : "₹4,800"}</p>
+                <p className="font-display text-lg font-semibold text-ink">{fees && fees.balance ? `₹${fees.balance.toLocaleString("en-IN")}` : "₹0"}</p>
               </div>
               <div>
                 <p className="text-xs text-indigo-400">Days Present</p>

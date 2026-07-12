@@ -24,6 +24,26 @@ export async function markAttendance(req, res) {
   res.json({ marked: results.length, records: results });
 }
 
+// POST /attendance/quick
+// body: { studentId, date, status }
+export async function markQuickAttendance(req, res) {
+  const { studentId, date, status } = req.body;
+  if (!studentId || !date || !status) {
+    return res.status(400).json({ error: "studentId, date, and status are required." });
+  }
+
+  const { rows } = await query(
+    `INSERT INTO attendance (student_id, date, status, marked_by)
+     VALUES ($1, $2, $3, $4)
+     ON CONFLICT (student_id, date)
+     DO UPDATE SET status = EXCLUDED.status, marked_by = EXCLUDED.marked_by
+     RETURNING *`,
+    [studentId, date, status, req.user.id]
+  );
+
+  res.json({ marked: 1, record: rows[0] });
+}
+
 // GET /attendance?classId=&sectionId=&date=
 export async function getAttendanceForClass(req, res) {
   const { classId, sectionId, date } = req.query;

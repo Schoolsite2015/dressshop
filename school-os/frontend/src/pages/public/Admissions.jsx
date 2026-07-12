@@ -9,7 +9,7 @@ const CLASSES = [
 
 export default function Admissions() {
   const [form, setForm] = useState({
-    applicantName: "", dob: "", classAppliedFor: "", parentName: "", phone: "", email: "", address: "",
+    applicantName: "", dob: "", classAppliedFor: "", parentName: "", motherName: "", aadharNo: "", phone: "", email: "", address: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
@@ -66,8 +66,14 @@ export default function Admissions() {
                 {CLASSES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </Field>
-            <Field label="Parent / Guardian name" required>
+            <Field label="Father / Guardian name" required>
               <input required value={form.parentName} onChange={update("parentName")} className="input" />
+            </Field>
+            <Field label="Mother's name">
+              <input value={form.motherName} onChange={update("motherName")} className="input" />
+            </Field>
+            <Field label="Aadhar Card No. (12 digits)">
+              <input type="text" maxLength={12} placeholder="Optional" value={form.aadharNo} onChange={update("aadharNo")} className="input" />
             </Field>
             <Field label="Phone number" required>
               <input required value={form.phone} onChange={update("phone")} className="input" />

@@ -40,7 +40,7 @@ export default function ShopShell({ children }) {
         <div className="px-4 py-5 border-b border-white/10 flex items-center gap-3">
           {shopSchool?.logo_path ? (
             <img
-              src={shopSchool.logo_path.startsWith("/logos") ? shopSchool.logo_path.replace("/logos", "/shop-logos") : shopSchool.logo_path}
+              src={shopSchool.logo_path}
               alt={shopSchool.name}
               className="w-10 h-10 rounded-full object-cover shrink-0 bg-white"
             />

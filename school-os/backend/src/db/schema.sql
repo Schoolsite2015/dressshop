@@ -72,6 +72,9 @@ CREATE TABLE students (
   admission_date  DATE NOT NULL DEFAULT CURRENT_DATE,
   status          TEXT NOT NULL DEFAULT 'active', -- active | left | graduated
   photo_url       TEXT,
+  qr_code         TEXT UNIQUE,
+  mother_name     TEXT,
+  aadhar_no       TEXT,
   created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -89,6 +92,24 @@ CREATE TABLE staff (
   joining_date  DATE,
   salary_basic  NUMERIC(10,2),
   photo_url     TEXT
+);
+
+CREATE TABLE teacher_class_assignments (
+  id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  teacher_id       UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+  class_id         UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+  section_id       UUID NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+  is_class_teacher BOOLEAN NOT NULL DEFAULT FALSE,
+  UNIQUE(teacher_id, class_id, section_id)
+);
+
+CREATE TABLE teacher_subject_assignments (
+  id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  teacher_id       UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
+  class_id         UUID NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
+  section_id       UUID NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+  subject_id       UUID NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+  UNIQUE(teacher_id, class_id, section_id, subject_id)
 );
 
 CREATE TABLE staff_attendance (
@@ -160,6 +181,8 @@ CREATE TABLE admissions (
   dob               DATE,
   class_applied_for TEXT NOT NULL,
   parent_name       TEXT NOT NULL,
+  mother_name       TEXT,
+  aadhar_no         TEXT,
   phone             TEXT NOT NULL,
   email             TEXT,
   address           TEXT,

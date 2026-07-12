@@ -15,6 +15,7 @@ import Login              from "./pages/auth/Login.jsx";
 // Dashboards
 import PrincipalDashboard from "./pages/dashboards/principal/PrincipalDashboard.jsx";
 import Attendance         from "./pages/dashboards/teacher/Attendance.jsx";
+import QuickAttendance    from "./pages/dashboards/teacher/QuickAttendance.jsx";
 import AIReportCard       from "./pages/dashboards/teacher/AIReportCard.jsx";
 import Gradebook          from "./pages/dashboards/teacher/Gradebook.jsx";
 import LessonPlanner      from "./pages/dashboards/teacher/LessonPlanner.jsx";
@@ -81,6 +82,8 @@ export default function App() {
       <Route path="/dashboard/principal" element={
         <ProtectedRoute allowedRoles={["principal","admin"]}><PrincipalDashboard /></ProtectedRoute>} />
 
+      <Route path="/dashboard/teacher/quick-attendance" element={
+        <ProtectedRoute allowedRoles={["teacher","admin"]}><QuickAttendance /></ProtectedRoute>} />
       <Route path="/dashboard/teacher/attendance" element={
         <ProtectedRoute allowedRoles={["teacher","admin"]}><Attendance /></ProtectedRoute>} />
       <Route path="/dashboard/teacher/report-card" element={

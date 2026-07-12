@@ -29,6 +29,7 @@ const MODULES = {
     { label: "Uniform Shop",        path: "/shop",                             icon: ShoppingBag },
   ],
   teacher: [
+    { label: "Quick Attendance",    path: "/dashboard/teacher/quick-attendance", icon: UserPlus },
     { label: "Attendance",          path: "/dashboard/teacher/attendance",     icon: ClipboardCheck },
     { label: "Gradebook",           path: "/dashboard/teacher/gradebook",      icon: BarChart2 },
     { label: "AI Report Card",      path: "/dashboard/teacher/report-card",    icon: Sparkles },

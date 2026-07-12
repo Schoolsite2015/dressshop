@@ -63,11 +63,10 @@ app.use(
 
 // Proxy dress shop logo images
 app.use(
-  "/shop-logos",
+  "/logos",
   createProxyMiddleware({
     target: SHOP_ORIGIN,
     changeOrigin: true,
-    pathRewrite: { "^/": "/logos/" },
   })
 );
 // ─────────────────────────────────────────────────────────────────────────────

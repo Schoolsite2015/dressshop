@@ -2,14 +2,14 @@ import { query } from "../config/db.js";
 
 // Public endpoint — no auth. A parent applying from the school website.
 export async function applyOnline(req, res) {
-  const { applicantName, dob, classAppliedFor, parentName, phone, email, address } = req.body;
+  const { applicantName, dob, classAppliedFor, parentName, motherName, aadharNo, phone, email, address } = req.body;
   if (!applicantName || !classAppliedFor || !parentName || !phone) {
     return res.status(400).json({ error: "Applicant name, class applied for, parent name and phone are required." });
   }
   const { rows } = await query(
-    `INSERT INTO admissions (applicant_name, dob, class_applied_for, parent_name, phone, email, address)
-     VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id, applicant_name, status, applied_at`,
-    [applicantName, dob || null, classAppliedFor, parentName, phone, email || null, address || null]
+    `INSERT INTO admissions (applicant_name, dob, class_applied_for, parent_name, mother_name, aadhar_no, phone, email, address)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id, applicant_name, status, applied_at`,
+    [applicantName, dob || null, classAppliedFor, parentName, motherName || null, aadharNo || null, phone, email || null, address || null]
   );
   res.status(201).json({ application: rows[0] });
 }
