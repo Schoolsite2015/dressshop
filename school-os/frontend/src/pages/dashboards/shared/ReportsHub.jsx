@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../../../lib/api.js";
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
@@ -10,36 +12,9 @@ import StatCard from "../../../components/StatCard.jsx";
 import { useAuthStore } from "../../../store/authStore.js";
 import {
   BarChart2, PieChart as PieIcon, Users, CreditCard, BookOpen,
-  TrendingUp, Calendar, Printer, Download, Award, GraduationCap, FileText, ClipboardCheck
+  TrendingUp, Calendar, Printer, Download, Award, GraduationCap, FileText, ClipboardCheck,
+  Loader2
 } from "lucide-react";
-
-// Mock Data
-const attendanceData = [
-  { class: "Class I", present: 95, absent: 5 },
-  { class: "Class V", present: 92, absent: 8 },
-  { class: "Class VIII", present: 88, absent: 12 },
-  { class: "Class X", present: 94, absent: 6 },
-  { class: "Class XII", present: 85, absent: 15 },
-];
-
-const gradeData = [
-  { grade: "A+", count: 45 },
-  { grade: "A", count: 120 },
-  { grade: "B+", count: 200 },
-  { grade: "B", count: 150 },
-  { grade: "C", count: 80 },
-  { grade: "D", count: 30 },
-  { grade: "F", count: 10 },
-];
-
-const subjectAvgData = [
-  { subject: "Math", score: 75, fullMark: 100 },
-  { subject: "Science", score: 82, fullMark: 100 },
-  { subject: "English", score: 88, fullMark: 100 },
-  { subject: "Hindi", score: 91, fullMark: 100 },
-  { subject: "SST", score: 79, fullMark: 100 },
-  { subject: "Computer", score: 85, fullMark: 100 },
-];
 
 const COLORS = ["#6366f1", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#3b82f6", "#ec4899"];
 
@@ -53,6 +28,33 @@ export default function ReportsHub() {
     { id: "fees", label: "Fees & Finance", icon: CreditCard },
     { id: "staff", label: "Staff & HR", icon: Users },
   ];
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["reports-hub-data"],
+    queryFn: () => api.get("/admin/reports-hub").then(res => res.data),
+  });
+
+  if (isLoading) {
+    return (
+      <DashboardShell title="Reports Hub" subtitle="Centralized analytics and reporting center">
+        <div className="flex items-center justify-center h-64 text-indigo-500">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </div>
+      </DashboardShell>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <DashboardShell title="Reports Hub" subtitle="Centralized analytics and reporting center">
+        <div className="flex items-center justify-center h-64 text-red-500">
+          Failed to load reports data.
+        </div>
+      </DashboardShell>
+    );
+  }
+
+  const { overview, charts } = data;
 
   return (
     <DashboardShell title="Reports Hub" subtitle="Centralized analytics and reporting center">
@@ -92,10 +94,10 @@ export default function ReportsHub() {
           {activeTab === "overview" && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard label="Total Students" value="1,245" sub="Across 45 sections" trend="up" trendVal="5.2%" icon={Users} color="indigo" />
-                <StatCard label="Avg Attendance" value="92.4%" sub="This month" trend="up" trendVal="1.1%" icon={ClipboardCheck} color="emerald" />
-                <StatCard label="Pass Percentage" value="88.5%" sub="Last term exams" trend="up" trendVal="2.4%" icon={Award} color="marigold" />
-                <StatCard label="Fee Collection" value="95%" sub="Q1 Target met" trend="down" trendVal="0.5%" icon={CreditCard} color="rose" />
+                <StatCard label="Total Students" value={overview.totalStudents} sub={`Across ${overview.totalSections} sections`} trend="up" trendVal="New" icon={Users} color="indigo" />
+                <StatCard label="Avg Attendance" value={`${overview.avgAttendance}%`} sub="This month" trend="up" trendVal="" icon={ClipboardCheck} color="emerald" />
+                <StatCard label="Pass Percentage" value={`${overview.passPercentage}%`} sub="Overall" trend="up" trendVal="" icon={Award} color="marigold" />
+                <StatCard label="Fee Collection" value={`${overview.feeCollectionRate}%`} sub="Target vs Expected" trend="up" trendVal="" icon={CreditCard} color="rose" />
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -104,7 +106,7 @@ export default function ReportsHub() {
                   <h3 className="text-lg font-semibold text-gray-800 mb-6">Class-wise Attendance</h3>
                   <div className="h-72">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={attendanceData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                      <BarChart data={charts.attendanceData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
                         <XAxis dataKey="class" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} dy={10} />
                         <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
@@ -124,7 +126,7 @@ export default function ReportsHub() {
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
-                          data={gradeData}
+                          data={charts.gradeData}
                           cx="50%"
                           cy="50%"
                           outerRadius={100}
@@ -132,7 +134,7 @@ export default function ReportsHub() {
                           labelLine={false}
                           label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
                         >
-                          {gradeData.map((entry, index) => (
+                          {charts.gradeData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>
@@ -148,7 +150,7 @@ export default function ReportsHub() {
                   <h3 className="text-lg font-semibold text-gray-800 mb-6">Average Subject Performance</h3>
                   <div className="h-80">
                     <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={subjectAvgData}>
+                      <RadarChart cx="50%" cy="50%" outerRadius="80%" data={charts.subjectAvgData}>
                         <PolarGrid stroke="#e5e7eb" />
                         <PolarAngleAxis dataKey="subject" tick={{ fill: '#4b5563', fontSize: 13, fontWeight: 500 }} />
                         <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#9ca3af' }} />

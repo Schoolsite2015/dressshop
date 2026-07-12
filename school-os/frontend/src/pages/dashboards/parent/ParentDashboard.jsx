@@ -100,8 +100,9 @@ export default function ParentDashboard() {
     queryFn: () => api.get("/notices").then((r) => r.data.notices),
   });
   const { data: homework } = useQuery({
-    queryKey: ["my-homework"],
-    queryFn: () => api.get("/homework?classId=1").then((r) => r.data.homework),
+    queryKey: ["my-homework", selectedStudent?.class_id],
+    queryFn: () => api.get(`/homework?classId=${selectedStudent?.class_id || ""}`).then((r) => r.data.homework),
+    enabled: !!selectedStudent,
   });
   const { data: students } = useQuery({
     queryKey: ["me-student-lookup"],

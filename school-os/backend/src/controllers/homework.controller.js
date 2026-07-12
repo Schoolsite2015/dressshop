@@ -13,21 +13,30 @@ export async function createHomework(req, res) {
   res.status(201).json({ homework: rows[0] });
 }
 
-// GET /homework?classId=&sectionId=
 export async function listHomework(req, res) {
   const { classId, sectionId } = req.query;
-  const { rows } = await query(
-    `SELECT h.*, s.name AS subject_name, c.name AS class_name, sec.name AS section_name
-     FROM homework h
-     LEFT JOIN subjects s ON s.id = h.subject_id
-     LEFT JOIN classes c ON c.id = h.class_id
-     LEFT JOIN sections sec ON sec.id = h.section_id
-     WHERE ($1::uuid IS NULL OR h.class_id = $1)
-       AND ($2::uuid IS NULL OR h.section_id = $2)
-     ORDER BY h.due_date DESC NULLS LAST, h.created_at DESC`,
-    [classId || null, sectionId || null]
-  );
-  res.json({ homework: rows });
+
+  const isValidUUID = (id) => /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(id);
+  const cid = isValidUUID(classId) ? classId : null;
+  const sid = isValidUUID(sectionId) ? sectionId : null;
+
+  try {
+    const { rows } = await query(
+      `SELECT h.*, s.name AS subject_name, c.name AS class_name, sec.name AS section_name
+       FROM homework h
+       LEFT JOIN subjects s ON s.id = h.subject_id
+       LEFT JOIN classes c ON c.id = h.class_id
+       LEFT JOIN sections sec ON sec.id = h.section_id
+       WHERE ($1::uuid IS NULL OR h.class_id = $1)
+         AND ($2::uuid IS NULL OR h.section_id = $2)
+       ORDER BY h.due_date DESC NULLS LAST, h.created_at DESC`,
+      [cid, sid]
+    );
+    res.json({ homework: rows });
+  } catch (err) {
+    console.error("Error fetching homework:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
 
 export async function deleteHomework(req, res) {

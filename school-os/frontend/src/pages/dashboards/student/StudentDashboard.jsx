@@ -153,8 +153,9 @@ export default function StudentDashboard() {
   });
 
   const { data: homework } = useQuery({
-    queryKey: ["my-homework"],
-    queryFn: () => api.get("/homework?classId=1").then((r) => r.data.homework),
+    queryKey: ["my-homework", me?.class_id],
+    queryFn: () => api.get(`/homework?classId=${me?.class_id || ""}`).then((r) => r.data.homework),
+    enabled: !!me,
   });
 
   const { data: notices } = useQuery({

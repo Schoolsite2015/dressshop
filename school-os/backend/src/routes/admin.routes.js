@@ -24,6 +24,7 @@ import {
   getAnalytics,
   exportDatabase
 } from "../controllers/admin.controller.js";
+import { getReportsHubData } from "../controllers/reports.controller.js";
 
 const router = express.Router();
 
@@ -45,6 +46,7 @@ router.use(requireRole("principal", "office", "admin"));
 
 // Analytics
 router.get("/analytics", getAnalytics);
+router.get("/reports-hub", getReportsHubData);
 
 // Backup
 router.get("/backup", exportDatabase);
